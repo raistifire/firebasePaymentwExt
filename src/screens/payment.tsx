@@ -52,12 +52,13 @@ export default function Payment(props : {user : User | object | null | any} ){
                     // inspect your Cloud Function logs in the Firebase console.
                     alert(`An error occured: ${error.message}`);
                     }
+
                     if (sessionId) {
                     // We have a session, let's redirect to Checkout
                     // Init Stripe
                     
-                    const stripe = loadStripe(PUBLIC_KEY)
-                    
+                    const stripe = await loadStripe(PUBLIC_KEY)
+
                         if(stripe){
                             stripe.redirectToCheckout({ sessionId });
                         }
