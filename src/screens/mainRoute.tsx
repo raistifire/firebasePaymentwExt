@@ -17,21 +17,21 @@ import { Button } from '@material-ui/core';
 
 import firebase from 'firebase'
 
-
-
 export default function MainRoute(){
 
     const [currentUser, setcurrentUser] = useState<User | object | null>({})
 
-    useEffect(()=>{
-        
 
+    useEffect(()=>{
+    
     },[])
 
     return (
         <div>
             <h1>Firebase Extension Function Testing</h1>
-            <Payment />
+
+            <Payment user={currentUser} />
+            
             <Button
             variant="contained"
             title='Hello World'
@@ -47,7 +47,8 @@ export default function MainRoute(){
                         auth.signInWithPopup(provider)
                             .then(
                                 (res : UserCredential)=>{
-                                    
+
+                                    console.log('Click Sign-in')
                                     console.log(res.user)
 
                                     setcurrentUser(res.user)

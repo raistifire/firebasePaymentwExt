@@ -1,11 +1,12 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import { 
     User 
 } from '@firebase/auth-types'
 
 
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe, Stripe, StripeConstructorOptions} from '@stripe/stripe-js';
+// import { Elements } from '@stripe/react-stripe-js'; , Stripe, StripeConstructorOptions
+import { loadStripe} from '@stripe/stripe-js';
+import { db } from '../api/firebase/configApi';
 
 const PK = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY
 
@@ -15,26 +16,124 @@ if(typeof(PK) === 'string'){
     PUBLIC_KEY = PK
 }
 
-const stripePromise = loadStripe(PUBLIC_KEY)
+
 // stripe={stripePromise}
 
-export default function Payment(props : User ){
+// Need to sub1  type the UID  either string | null 
+export default function Payment(props : {user : User | object | null | any} ){
+    
+    useEffect(()=>{
 
-    return (
-        <Elements 
-            stripe={stripePromise}
-        >
+        console.log('Component did mount Payment ')
+        console.log(props.user.uid)
+            
+        const stripeCheckout = async() => {
+
+            console.log('stripeCheckout')
+            if(props.user.uid){
+
+                const docRef = await db
+                .collection('customers')
+                .doc(props.user.uid)
+                .collection('checkout_sessions')
+                .add({
+                    price: 'price_1J8hNzIRx5ymj2h5RVUFIpHx',
+                    success_url: window.location.origin,
+                    cancel_url: window.location.origin,
+                });
+
+
+                docRef.onSnapshot(async (snap : any ) => {
+
+                    const { error, sessionId } = snap.data();
+
+                    if (error) {
+                    // Show an error to your customer and 
+                    // inspect your Cloud Function logs in the Firebase console.
+                    alert(`An error occured: ${error.message}`);
+                    }
+                    if (sessionId) {
+                    // We have a session, let's redirect to Checkout
+                    // Init Stripe
+                    
+                    const stripe = loadStripe(PUBLIC_KEY)
+                    
+                        if(stripe){
+                            stripe.redirectToCheckout({ sessionId });
+                        }
+                    
+                    }
+                });
+
+            }
+
+        }
+
+        stripeCheckout()
         
 
+        return (()=>{
+             console.log('Umount - Payment.tsx ')
+            console.log(props.user)
+        })
+    })
+        
+
+    return (
 
 
-        </Elements>
+        // <Elements 
+        //     stripe={stripePromise}
+        // >
+            <div>
+                {
+                props.user.uid
+                ? 
+                <><h3>{props.user.uid}</h3></> 
+                : 
+                <><h3>nothing</h3> </>}
+
+            </div>
+
+
+
+        // </Elements>
     )
 }
+
+
+
+// Elements component is a useContext wrap for Payment form
+
+// Payment form can be customise inside Element Component 
+
+
+// e.g. 
+
+// StripeContainer.js
+
+// <Elements 
+//             stripe={stripePromise}
+//         >
+        
+        // <PaymentForm />
+
+// </Elements>
+
+
+// The mainRoute call StripeContainer to call the payment customise form
+// function App(){    return (<div> StripeContainer </div>)  }
+// 
+// 
+
+
 // =================================================================
 // import {loadStripe} from '@stripe/stripe-js';
+
 // // [...]
+
 // // Wait for the CheckoutSession to get attached by the extension
+
 // docRef.onSnapshot(async (snap) => {
 
 //   const { error, sessionId } = snap.data();
@@ -63,6 +162,9 @@ export default function Payment(props : User ){
 //     success_url: window.location.origin,
 //     cancel_url: window.location.origin,
 //   });
+
+
+
 // // Wait for the CheckoutSession to get attached by the extension
 // docRef.onSnapshot((snap) => {
 //   const { error, sessionId } = snap.data();
