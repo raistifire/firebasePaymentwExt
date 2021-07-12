@@ -21,8 +21,7 @@ app.post('/webhook', express.json({type: 'application/json'}), async (request, r
         var charge = await stripe.checkout.sessions.retrieve(
             event.data.object.id,
             {
-              //  apiKey: 'sk_test_51J6ZGZIRx5ymj2h5T68vXExHyZ7QI3T0ygXPZDoDTZVA2JdRinuACrApMsvwARI7FE5JIRR53x0KO5FYBlRz7YHl00ijxehqju',
-                expand: ['line_items','line_items.data.price'],
+               expand: ['line_items'],
             }
         );
         //line_items.data.price.product

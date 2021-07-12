@@ -28,7 +28,6 @@ export default function MainRoute(){
 
     return (
         <div>
-            sdfsdfsd
 
             <h1>Firebase Extension Function Testing</h1>
 

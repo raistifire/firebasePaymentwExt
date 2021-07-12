@@ -60,7 +60,7 @@ export default function Payment(props : {user : User | object | null | any} ){
                     const stripe = await loadStripe(PUBLIC_KEY)
 
                         if(stripe){
-                            stripe.redirectToCheckout({ sessionId });
+                    //        stripe.redirectToCheckout({ sessionId });
                         }
                     
                     }
