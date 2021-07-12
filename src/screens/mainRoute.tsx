@@ -28,17 +28,19 @@ export default function MainRoute(){
 
     return (
         <div>
+            sdfsdfsd
+
             <h1>Firebase Extension Function Testing</h1>
 
             <Payment user={currentUser} />
-            
+
             <Button
             variant="contained"
             title='Hello World'
             color="primary"
 
                 onClick={async()=>{
-                
+
                 console.log('google sign in')
                 const provider : AuthProvider = new firebase.auth.GoogleAuthProvider()
 
@@ -52,14 +54,14 @@ export default function MainRoute(){
                                     console.log(res.user)
 
                                     setcurrentUser(res.user)
-                                
+
                                 })
                             .catch((error)=>{console.log(error)})
-                    
+
                     }
-                
+
                 signInWithGoogle()
-                
+
                 }
 
             }>Google Sign-in</Button>

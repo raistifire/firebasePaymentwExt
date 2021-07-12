@@ -1,0 +1,10 @@
+event type setup_intent.succeeded
+event type setup_intent.created
+event type checkout.session.completed
+event type invoice.updated
+event type invoice.created
+event type invoice.finalized
+event type customer.subscription.updated
+event type customer.subscription.created
+event type invoice.paid
+event type invoice.payment_succeeded
