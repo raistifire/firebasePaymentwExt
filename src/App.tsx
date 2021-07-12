@@ -22,6 +22,7 @@ function App() {
               <Switch>
                   <Route component={LandingPage} path="/" exact />
                   <Route component={SignInPage} path="/signin" exact />
+=                  <Route component={MainRoute} path="/test" exact />
                   <Route component={TokenPage} path="/:token" exact />
                   {/*<PrivateRoute component={DashboardPage} path="/:token" exact />*/}
 
